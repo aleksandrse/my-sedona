@@ -1,7 +1,6 @@
-//import {newCard} from "./productCard.js";
-
 
 let paginationList = document.querySelector(".pagination-list");
+
 function getPaginationItem (i) {
   
   let paginationItem = document.createElement('li');
@@ -12,10 +11,9 @@ function getPaginationItem (i) {
   paginationItem.appendChild(paginationLink);
   paginationList.appendChild(paginationItem);
 }
-//getPaginationItem ();
 
-function createPagination (list, step){
-    let counter = Math.ceil(list.length/step);
+function createPagination(list, step1){
+    let counter = Math.ceil(list.length/step1);
     paginationList.innerHTML = "";
      for (let i = 1; i <= counter; i++){
         getPaginationItem (i)

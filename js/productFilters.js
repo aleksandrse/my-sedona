@@ -1,10 +1,11 @@
-// фильтр дешевые, дорогие, популярные
-
 import {createCards, productCardList, newCard,minSlice,maxSlice} from "./productCard.js";
 
-function filter1 () {
+// фильтр дешевые, дорогие, популярные
+function getSort () {
     const selectSorting = document.querySelector(".select-sorting");
+
     selectSorting.addEventListener('change',(e)=>{
+        
         if(e.target.value === "cheap" ){
             newCard.sort(( a, b )=>{
                return a.price - b.price
@@ -12,7 +13,7 @@ function filter1 () {
             productCardList.innerHTML = "";
             let newCard12 = newCard.slice( minSlice,maxSlice);
             createCards (newCard12);
-            console.log(newCard12);
+            
         }
         else if (e.target.value === "expensive" ){
             newCard.sort(( a, b )=>{
@@ -21,7 +22,7 @@ function filter1 () {
             productCardList.innerHTML = "";
             let newCard12 = newCard.slice( minSlice,maxSlice);
             createCards (newCard12);
-            console.log(newCard12);
+            
         }
 
         else if (e.target.value === "popular" ){
@@ -31,16 +32,15 @@ function filter1 () {
             productCardList.innerHTML = "";
             let newCard12 = newCard.slice( minSlice,maxSlice);
             createCards (newCard12);
-            console.log(newCard12);
+            
         }
 
         });
     }
 
-filter1()
+ getSort()
 
 // фильтр по ценовому диапазону
-
 
 // изменение цены полями ввода
 let catalogFilterInput = document.querySelectorAll(".catalog-filter-input"); 
@@ -77,9 +77,9 @@ catalogFilterInput[1].addEventListener("change", ()=>{
     }
     
 })  
+
    // изменение цены ползунками
 
-  
    // левый ползунок
    rangeToggleMin.addEventListener("mousedown",function(e){
        e.preventDefault();
@@ -126,18 +126,15 @@ catalogFilterInput[1].addEventListener("change", ()=>{
         document.addEventListener("mouseup", onMouseUp);
        
         function onMouseMove (e) {
-            //console.log("движение над элементом");
+            
             let newStyleLeft = e.clientX - shiftX - range.getBoundingClientRect().left;
             if( newStyleLeft < 0 ) { 
              newStyleLeft = 19
              };
-
-             //let rightEdge = range.offsetWidth - rangeToggleMax.offsetWidth;
              let rightEdge = range.offsetWidth;
             if ( newStyleLeft > rightEdge ) {
              newStyleLeft =  rightEdge - 1;
             };
-            
             if (newStyleLeft < parseInt(rangeToggleMin.style.left)){
                 newStyleLeft = parseInt(rangeToggleMin.style.left) ;
                }

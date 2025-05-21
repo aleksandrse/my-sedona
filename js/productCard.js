@@ -1,21 +1,44 @@
  import {createPagination} from "./pagination.js";
  import { Card } from "./data.js";
+
  let step = 4;
 let minSlice = 0;
 let maxSlice =step ; 
+let newCard = Card;
 
-let newCard = Card.slice( minSlice,maxSlice);
+createPagination(Card, step);
 
-createPagination (Card, step)
+// Отображение карточек товаров 
+const productCardList = document.querySelector(".product-card-list");
+const productCardItems = document.querySelectorAll(".product-card-item");
+const similarCardTemplate = document.querySelector("#cards").content.querySelector(".product-card-item");
+const similarCardFragment = document.createDocumentFragment();
 
+ function createCards (newCard){
+  productCardList.innerHTML = "";
+   newCard.forEach((card)=>{
+      productCardItems.forEach((item)=>item.remove());
+      const cardElement = similarCardTemplate.cloneNode(true);
+      cardElement.querySelector(".product-card-title").textContent = card.name;
+      cardElement.querySelector(".price").textContent = card.price + "Р";
+      cardElement.querySelector(".product-card-image").src = "image/katalog/" + card.url;
+      cardElement.querySelector(".rating").textContent = card.rating;
+      cardElement.querySelector(".product-card-text").textContent = card.typeOfHousing;
+      cardElement.querySelector(".product-card-rating-icon").classList.add(card.class);
+      similarCardFragment.appendChild(cardElement);
+   }) 
+   productCardList.appendChild(similarCardFragment); 
+   numberProduct();  
+ }
+ createCards (newCard);
 
-// фильтрация инфраструктурой 
+// фильтрация инфраструктурой (бассейн, парковка, wifi)
 
 let catalogFilterList = document.querySelectorAll(".catalog-filter-list");
 let controlInputInfrastructure =  catalogFilterList[0].querySelectorAll(".control-input");
 let objInfrastructure = []
 function catalogFilterInfrastructure (arr){
-  objInfrastructure = []
+objInfrastructure = []
 controlInputInfrastructure.forEach((item)=>{
 if( item.checked ){
   objInfrastructure.push(item.value);
@@ -51,21 +74,6 @@ function bar(arr, copies) {
   }
   return res;
 }
-
-
-
-
-/*var cbs = document.querySelectorAll('[type="checkbox"]');
-[].forEach.call(cbs, function(cb) {
-cb.addEventListener("click", function() {
-	const listSelected = [...document.querySelectorAll('input[name="list_services"]:checked')].map(ele=>ele.value);
-	document.querySelectorAll('.fruits_lists li').forEach(ele=>listSelected.some(l=>ele.textContent.includes(l)) ? (ele.style.display = "block") : (ele.style.display = "none"))
-
-});
-});
-*/
-
-
 
 // Фильтрация радиокнопками (гостиница, мотель, апартаменты)
 
@@ -107,7 +115,6 @@ let filterButton = document.querySelector(".button-apply")
 filterButton.addEventListener("click",(e)=>{
   e.preventDefault();
   let filter1 = bar(catalogFilterInfrastructure(Card),objInfrastructure.length);
-  //console.log(objInfrastructure);
   let filter2 = filterRadio(Card);
   let filter3 =getFilterPrice(Card);
   let sumFilter1 = filter1.concat(filter2);
@@ -120,7 +127,6 @@ filterButton.addEventListener("click",(e)=>{
   });
   let newCard1 = duplicates2.slice( minSlice,maxSlice);
   newCard = duplicates2;
-  console.log(newCard);
   createCards(newCard1);
   createPagination (newCard, step)
 } )
@@ -137,59 +143,34 @@ const showMoreButton = document.querySelector(".show-more-button");
 
 showMoreButton.addEventListener("click",() =>{
    productCardList.innerHTML = "";
-   
    maxSlice +=step;
    let newCardShow = newCard.slice( minSlice,maxSlice);
    createCards (newCardShow );
-   console.log(newCard) 
    if(maxSlice>=newCard.length){
      showMoreButton.classList.add("visually-hidden")
     } 
  
 })
 
-// Отображение карточек товаров 
-const productCardList = document.querySelector(".product-card-list");
-const productCardItems = document.querySelectorAll(".product-card-item");
-const similarCardTemplate = document.querySelector("#cards").content.querySelector(".product-card-item");
-const similarCardFragment = document.createDocumentFragment();
 
- function createCards (newCard){
-  productCardList.innerHTML = "";
-   newCard.forEach((card)=>{
-      productCardItems.forEach((item)=>item.remove());
-      const cardElement = similarCardTemplate.cloneNode(true);
-      cardElement.querySelector(".product-card-title").textContent = card.name;
-      cardElement.querySelector(".price").textContent = card.price + "Р";
-      cardElement.querySelector(".product-card-image").src = "image/katalog/" + card.url;
-      cardElement.querySelector(".rating").textContent = card.rating;
-      cardElement.querySelector(".product-card-text").textContent = card.typeOfHousing;
-      cardElement.querySelector(".product-card-rating-icon").classList.add(card.class);
-      similarCardFragment.appendChild(cardElement);
-   }) 
-   productCardList.appendChild(similarCardFragment); 
-   numberProduct();  
- }
- createCards (newCard);
 
- // выбор количества карточек показа Select
-
+ // выбор количества карточек 4,8,16
 
  let select = document.querySelector(".namber-cards-select");
- select.addEventListener('change', function (e) {
+ select.addEventListener('click', function (e) {
    
    productCardList.innerHTML = "";
    step = +e.target.value;
-   console.log(newCard);
    maxSlice = minSlice + step;
    let newCardShow = newCard.slice( minSlice,maxSlice);
    createCards (newCardShow);
+   createPagination (newCard, step);
    if(maxSlice < newCard.length ) {
     showMoreButton.classList.remove("visually-hidden")
    }
 });
 
-// кнопки отображения страниц
+// показ карточек товаров кнопками 1,2,3,4...
 
 let buttonPaginator = document.querySelector(".pagination-list");
 
@@ -199,7 +180,6 @@ buttonPaginator.addEventListener("click", function(e){
   if (step === 4){
     maxSlice = +e.target.textContent *4 ;
     minSlice = maxSlice - 4;
-    console.log(newCard);
     let newCardhow = newCard.slice( minSlice,maxSlice);
     createCards (newCardhow);
    
