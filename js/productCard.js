@@ -28,7 +28,7 @@ const similarCardFragment = document.createDocumentFragment();
       similarCardFragment.appendChild(cardElement);
    }) 
    productCardList.appendChild(similarCardFragment); 
-   numberProduct();  
+   numberProduct(newCard);  
  }
  createCards (newCard);
 
@@ -36,24 +36,28 @@ const similarCardFragment = document.createDocumentFragment();
 
 let catalogFilterList = document.querySelectorAll(".catalog-filter-list");
 let controlInputInfrastructure =  catalogFilterList[0].querySelectorAll(".control-input");
-let objInfrastructure = []
+let objInfrastructure = [];
+
 function catalogFilterInfrastructure (arr){
-objInfrastructure = []
+objInfrastructure = [];
 controlInputInfrastructure.forEach((item)=>{
 if( item.checked ){
   objInfrastructure.push(item.value);
 }
+//console.log(objInfrastructure);
 });
 
 let arrCheckBox=[];
+
    Card.forEach((item)=>{
     objInfrastructure.forEach((item1)=>{
       if(item.infrastructure[item1]){
-        arrCheckBox.push(item);
-      }
+       // console.log(item.infrastructure[item1]);
+       arrCheckBox.push(item);
+     }
     })
-  })
-  
+ })
+ //console.log(arrCheckBox);
   return arrCheckBox
 }
 
@@ -115,12 +119,25 @@ let filterButton = document.querySelector(".button-apply")
 filterButton.addEventListener("click",(e)=>{
   e.preventDefault();
   let filter1 = bar(catalogFilterInfrastructure(Card),objInfrastructure.length);
-  let filter2 = filterRadio(Card);
-  let filter3 =getFilterPrice(Card);
-  let sumFilter1 = filter1.concat(filter2);
-  let duplicates1 = sumFilter1.filter((item, index, arr)=>{
+  console.log(filter1);
+  let filter2 = filterRadio(filter1);
+  console.log(filter2);
+  let filter3 =getFilterPrice(filter2);
+  newCard = filter3;
+  console.log(filter3);
+  let newCard1 = filter3.slice( minSlice,maxSlice);
+  createCards(newCard1);
+  numberProduct(filter3);
+  createPagination (filter3, step)
+});
+  
+  /*let sumFilter1 = filter1.concat(filter2);
+  let duplicates1 ;
+ if (sumFilter1){
+   duplicates1 = sumFilter1.filter((item, index, arr)=>{
     return arr.indexOf(item) !== index
-  });
+  })};
+  console.log(duplicates1);
   let sumFilter2 = duplicates1.concat(filter3);
   let duplicates2 = sumFilter2.filter((item, index, arr)=>{
     return arr.indexOf(item) !== index
@@ -128,15 +145,11 @@ filterButton.addEventListener("click",(e)=>{
   let newCard1 = duplicates2.slice( minSlice,maxSlice);
   newCard = duplicates2;
   createCards(newCard1);
-  createPagination (newCard, step)
-} )
-
-
-
-
-
-
-
+  createPagination (newCard, step);
+  if(newCard.length === 0){
+    showMoreButton.classList.add("visually-hidden")
+  };
+} )*/
 
 // Кнопка "загрузить еще"
 const showMoreButton = document.querySelector(".show-more-button");
@@ -157,8 +170,7 @@ showMoreButton.addEventListener("click",() =>{
  // выбор количества карточек 4,8,16
 
  let select = document.querySelector(".namber-cards-select");
- select.addEventListener('click', function (e) {
-   
+ select.addEventListener('change', function (e) {
    productCardList.innerHTML = "";
    step = +e.target.value;
    maxSlice = minSlice + step;
@@ -211,10 +223,9 @@ else {
 
 // выводит в span число продуктов 
 
-function numberProduct(){
+function numberProduct(newCard){
   let numberOfproducts =document.querySelector(".sorting-text span");
 numberOfproducts.textContent = newCard.length;
-
 }
 
 export {productCardList};

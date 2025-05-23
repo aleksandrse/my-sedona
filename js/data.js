@@ -8,7 +8,7 @@ const Card = [{
    class:"product-card-rating-icon-1",
    typeOfHousing:"Гостиница",
    infrastructure: {
-     parking: "Парковка",
+     parking: "",
      wifi: "Wi-Fi",
      waterPool: "Бассейн"
        }
@@ -23,7 +23,7 @@ const Card = [{
   typeOfHousing:"Гостиница",
   infrastructure: {
    parking: "Парковка",
-   wifi: "Wi-Fi",
+   wifi: "",
    waterPool: "Бассейн"
      }
 },
@@ -581,5 +581,6 @@ infrastructure: {
 }
 ]
 
-
 export {Card};
+
+let arr1 = []
