@@ -128,7 +128,10 @@ filterButton.addEventListener("click",(e)=>{
   let newCard1 = filter3.slice( minSlice,maxSlice);
   createCards(newCard1);
   numberProduct(filter3);
-  createPagination (filter3, step)
+  createPagination (filter3, step);
+  if(newCard.length === 0){
+    showMoreButton.classList.add("visually-hidden")
+  };
 });
   
   /*let sumFilter1 = filter1.concat(filter2);
