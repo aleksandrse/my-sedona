@@ -22,8 +22,8 @@ const Card = [{
   class:"product-card-rating-icon-1",
   typeOfHousing:"Гостиница",
   infrastructure: {
-   parking: "Парковка",
-   wifi: "",
+   parking: "",
+   wifi: "Wi-Fi",
    waterPool: "Бассейн"
      }
 },
@@ -36,7 +36,7 @@ const Card = [{
   class:"product-card-rating-icon-1",
   typeOfHousing:"Гостиница",
   infrastructure: {
-   parking: "Парковка",
+   parking: "",
    wifi: "Wi-Fi",
    waterPool: "Бассейн"
      }

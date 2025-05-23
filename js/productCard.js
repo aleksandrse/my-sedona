@@ -6,12 +6,13 @@ let minSlice = 0;
 let maxSlice =step ; 
 let newCard = Card;
 
-createPagination(Card, step);
+
 
 // Отображение карточек товаров 
 const productCardList = document.querySelector(".product-card-list");
 const productCardItems = document.querySelectorAll(".product-card-item");
 const similarCardTemplate = document.querySelector("#cards").content.querySelector(".product-card-item");
+const showMoreButton = document.querySelector(".show-more-button"); 
 const similarCardFragment = document.createDocumentFragment();
 
  function createCards (newCard){
@@ -28,9 +29,11 @@ const similarCardFragment = document.createDocumentFragment();
       similarCardFragment.appendChild(cardElement);
    }) 
    productCardList.appendChild(similarCardFragment); 
-   numberProduct(newCard);  
  }
+ numberProduct(newCard);  
  createCards (newCard);
+ createPagination(Card, step);
+ showMoreButton.classList.add("visually-hidden");
 
 // фильтрация инфраструктурой (бассейн, парковка, wifi)
 
@@ -43,11 +46,14 @@ objInfrastructure = [];
 controlInputInfrastructure.forEach((item)=>{
 if( item.checked ){
   objInfrastructure.push(item.value);
-}
+} 
 //console.log(objInfrastructure);
 });
 
 let arrCheckBox=[];
+  if (objInfrastructure.length === 0 ){
+  return Card
+  }
 
    Card.forEach((item)=>{
     objInfrastructure.forEach((item1)=>{
@@ -57,7 +63,7 @@ let arrCheckBox=[];
      }
     })
  })
- //console.log(arrCheckBox);
+  console.log(arrCheckBox);
   return arrCheckBox
 }
 
@@ -93,6 +99,7 @@ if(item.checked){
   objRadio.push(...newCardRadio)
 }
 })
+
 return objRadio
 }
 
@@ -134,29 +141,17 @@ filterButton.addEventListener("click",(e)=>{
   };
 });
   
-  /*let sumFilter1 = filter1.concat(filter2);
-  let duplicates1 ;
- if (sumFilter1){
-   duplicates1 = sumFilter1.filter((item, index, arr)=>{
-    return arr.indexOf(item) !== index
-  })};
-  console.log(duplicates1);
-  let sumFilter2 = duplicates1.concat(filter3);
-  let duplicates2 = sumFilter2.filter((item, index, arr)=>{
-    return arr.indexOf(item) !== index
-  });
-  let newCard1 = duplicates2.slice( minSlice,maxSlice);
-  newCard = duplicates2;
-  createCards(newCard1);
-  createPagination (newCard, step);
-  if(newCard.length === 0){
-    showMoreButton.classList.add("visually-hidden")
-  };
-} )*/
+// Кнопка "Сбросить фильтры"
+const clearButton = document.querySelector(".button-clear");
+clearButton.addEventListener("click",(e)=>{
+  e.preventDefault();
+  numberProduct(Card);  
+ createCards (Card);
+ createPagination(Card, step);
+})
+
 
 // Кнопка "загрузить еще"
-const showMoreButton = document.querySelector(".show-more-button");
-
 showMoreButton.addEventListener("click",() =>{
    productCardList.innerHTML = "";
    maxSlice +=step;
@@ -175,9 +170,10 @@ showMoreButton.addEventListener("click",() =>{
  let select = document.querySelector(".namber-cards-select");
  select.addEventListener('change', function (e) {
    productCardList.innerHTML = "";
+   let newCardShow = newCard;
    step = +e.target.value;
    maxSlice = minSlice + step;
-   let newCardShow = newCard.slice( minSlice,maxSlice);
+   newCardShow = newCard.slice( minSlice,maxSlice);
    createCards (newCardShow);
    createPagination (newCard, step);
    if(maxSlice < newCard.length ) {
